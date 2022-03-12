@@ -11,7 +11,17 @@ module.exports = {
         
         try {
             let user = await authService.userCreate(req.body);
-            return res.status(httpStatus.CREATED).json({ message: message.CREATED, body: user });    
+
+            user = {
+                name: user.name,
+                email: user.email,
+                _id: user._id,
+            }
+            console.log(user);
+            let token = generateAccessToken(user)
+            
+            return res.status(httpStatus.CREATED).json({ message: message.CREATED, body: user,token });    
+
         } catch (error) {
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: message.INTERNAL_SERVER_ERROR, body: error });    
             
@@ -45,5 +55,20 @@ module.exports = {
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:message.INTERNAL_SERVER_ERROR,body : error})
         }
             
+    },
+
+    revalidateToken : async (req,res) => {
+
+        try {
+           let user = {
+                email: req.email,
+                name:req.name,
+                id: req.id
+              };
+            const token = await generateAccessToken(user)
+            return res.status(httpStatus.OK).json({message:message.OK,body:{token:token}})
+        } catch (error) {
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:message.INTERNAL_SERVER_ERROR,body : error})
+        }
     }
 }

@@ -10,6 +10,7 @@ module.exports = (req, res, next) => {
     if (payload === null) {
         return res.status(httpStatus.FORBIDDEN).json({message:message.FORBIDDEN,body:payload})
     }
+    req.uid = payload.uid;
   
     req.tokenPayload = payload;
   

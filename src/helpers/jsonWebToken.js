@@ -10,10 +10,10 @@ module.exports = {
     user = {
       email: user.email,
       role: "usuario",
-      id: user._id
+      uid: user._id
     };
 
-    const token = jwt.sign(user, process.env.ACCESS_SECRET, { expiresIn: 60 * 60 * 24 });
+    const token = jwt.sign(user, process.env.ACCESS_SECRET, { expiresIn: '2h'});
 
     return token; 
   },

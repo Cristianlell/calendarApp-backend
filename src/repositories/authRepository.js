@@ -1,4 +1,4 @@
-const User = require('../database/models/users')
+const User = require('../database/models/Users')
 
 module.exports = {
     findUserByEmail: async (email) => {
@@ -10,5 +10,7 @@ module.exports = {
         const user = await User.create(body)
         return user;
     },
+
+
 
 }
