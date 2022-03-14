@@ -1,6 +1,6 @@
 const getTokenFrom = (req) => {
   
-    const authorization = req.header('authorization');
+    const authorization = req.header('Authorization');
 
     if (authorization && authorization.toLowerCase().includes("bearer")) {
       return authorization.substring(7);

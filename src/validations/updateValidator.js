@@ -23,4 +23,7 @@ module.exports = [
             return true
         }
     }),
+    
+    check('id', 'No es un id válido de mongoDB').isMongoId()
 ]
+

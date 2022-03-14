@@ -13,22 +13,20 @@ module.exports = {
       uid: user._id
     };
 
-    const token = jwt.sign(user, process.env.ACCESS_SECRET, { expiresIn: '2h'});
+    const token = jwt.sign(user, process.env.ACCESS_SECRET, { expiresIn: '4h'});
 
     return token; 
   },
 
   validateToken: (req) => {
     const token = getTokenFrom(req);
-
     if (!token) return null; 
 
     try {
       const user = jwt.verify(token, process.env.ACCESS_SECRET);
-
       return user; //
     } catch (err) {
-      return err;
+      throw err;
     }
   },
 
