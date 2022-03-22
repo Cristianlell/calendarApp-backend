@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const cors = require('cors')
 var authRouter = require('./routes/authRoutes');
 var eventRouter = require('./routes/eventRoutes');
 const dbConnection = require('./database/config');
@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname,'..', 'public')));
 
 dbConnection();
-
+app.use(cors())
 app.use('/api/auth', authRouter);
 app.use('/api/event', eventRouter);
 

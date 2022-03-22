@@ -12,18 +12,25 @@ const error = new Error();
 module.exports = {
     
     userCreate : async (body) =>{      
-
-        body.password = await hashPassword(body.password);
-
-        user = {
-            name: user.name,
-            email: user.email,
-            _id: user._id,
+        
+        const user = await authRepository.findUserByEmail(body.email);
+        if (user) {
+            error.status = httpStatus.BAD_REQUEST
+            error.message = {message:message.DUPLICATE_EMAIL,body:user.email}
+        
+            throw error
         }
-        console.log(user);
-       user.token = generateAccessToken(user)
-        const user = await authRepository.createUser(body);
-        return user
+        body.password = await hashPassword(body.password);
+        
+        const createUser = await authRepository.createUser(body);
+        
+        response = {
+            name: createUser.name,
+            email: createUser.email,
+            _id: createUser._id,
+        }
+        response.token = generateAccessToken(response)
+        return response
     },
 
     findUserByEmail: async (email) => {
