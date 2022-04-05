@@ -1,12 +1,19 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const getTokenFrom = require('./getTokenFrom');
+const httpStatus = require('../constants/httpStatus')
+const message = require('../constants/messages');
 
 
 module.exports = {
   generateAccessToken: (user) => {
-    if (!user._id || !user.email) return null;
+    if (!user._id || !user.email) {
+      let error = new Error
 
+      error.status = httpStatus.BAD_REQUEST;
+      error.message = {ok:false,message:message.BAD_REQUEST,body:{email:user.email || null,_id:user._id || null}}
+      throw error
+    }
     user = {
       email: user.email,
       role: "usuario",

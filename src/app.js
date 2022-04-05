@@ -37,8 +37,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500).json({
-    message: err.message,
-    body: err
+    message: err.message || "INTERNAL SERVER ERROR",
+    body: err || err.body
   });
 });
 

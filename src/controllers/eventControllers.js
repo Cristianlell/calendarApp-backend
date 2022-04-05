@@ -2,7 +2,6 @@ const eventServices = require("../services/eventService")
 const httpStatus = require('../constants/httpStatus')
 const message = require('../constants/messages');
 
-
 module.exports = {
     getAll: async (req,res) =>{
         
@@ -21,7 +20,7 @@ module.exports = {
            
            let events = await eventServices.create(req);
 
-            return res.status(httpStatus.CREATED).json({message:message.CREATED,body:events})
+            return res.status(httpStatus.CREATED).json({ok:message.CREATED,body:events})
 
         } catch (error) {
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:message.INTERNAL_SERVER_ERROR,body : error})
@@ -31,21 +30,21 @@ module.exports = {
     update: async (req,res) =>{
         try {
             let result = await eventServices.update(req);
-            return res.status(httpStatus.OK).json({message:message.OK,body:result})
+            return res.status(httpStatus.OK).json({ok:message.OK,body:result})
 
         } catch (error) {
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:message.INTERNAL_SERVER_ERROR,body : error})
+            return res.status(error.status).json(error.message)
         }
     },
 
     remove: async (req,res) => {
         try {
             let result = await eventServices.remove(req);
-            return res.status(httpStatus.OK).json({message:message.OK,body:result})
+            return res.status(httpStatus.OK).json({ok:message.OK,body:result})
 
         } catch (error) {
             console.log(error);
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:message.INTERNAL_SERVER_ERROR,body : error})
+            return res.status(error.status).json(error.message)
         }
     }
 }

@@ -12,11 +12,11 @@ module.exports = {
         try {
             let user = await authService.userCreate(req.body);
 
-            return res.status(httpStatus.CREATED).json({ message: message.CREATED, body: user });    
+            return res.status(httpStatus.CREATED).json({ok:true, message: message.CREATED, body: user });    
 
         } catch (error) {
             console.log(error)
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: message.INTERNAL_SERVER_ERROR, body: error });    
+            return res.status(error.status).json(error.message);    
             
         }
     },
@@ -24,7 +24,7 @@ module.exports = {
     userLogin: async (req,res)=>{
         try {
             let user = await login(req)
-            return res.status(httpStatus.OK).json({message:message.OK,body:user})
+            return res.status(httpStatus.OK).json({ok:true,message:message.OK,body:user})
         } catch (error) {
             return res.status(error.status).json({body:error.message})
         }
@@ -34,15 +34,11 @@ module.exports = {
     revalidateToken : async (req,res) => {
 
         try {
-           let user = {
-                email: req.email,
-                name:req.name,
-                id: req.id
-              };
-            const token = await generateAccessToken(user)
-            return res.status(httpStatus.OK).json({message:message.OK,body:{token:token}})
+            let token = await authService.revalidateToken(req)
+            console.log(token);
+            return res.status(httpStatus.OK).json({ok:true,message:message.OK,body:{token:token}})
         } catch (error) {
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:message.INTERNAL_SERVER_ERROR,body : error})
+            return res.status(error.status).json(error.message)
         }
     }
 }

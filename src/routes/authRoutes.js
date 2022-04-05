@@ -8,5 +8,6 @@ var router = express.Router();
 router
   .post('/',registerValidator,validationFields,authController.userCreate)
   .post('/login',loginValidator,validationFields,authController.userLogin)
+  .post('/revalidate-token',authController.revalidateToken)
 
 module.exports = router;

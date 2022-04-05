@@ -28,7 +28,7 @@ module.exports = {
         
         if(!event){
             error.status = httpStatus.NOT_FOUND;
-            error.message = message.NOT_FOUND;
+            error.message = {messge:message.NOT_FOUND, body:event};
            
             throw error
         }
@@ -50,7 +50,7 @@ module.exports = {
         console.log(event)
         if(!event){
             error.status = httpStatus.NOT_FOUND;
-            error.message = message.NOT_FOUND;
+            error.message ={ messge:message.NOT_FOUND, body:event};
            
             throw error
         }

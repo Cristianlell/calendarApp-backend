@@ -16,7 +16,7 @@ module.exports = {
         const user = await authRepository.findUserByEmail(body.email);
         if (user) {
             error.status = httpStatus.BAD_REQUEST
-            error.message = {message:message.DUPLICATE_EMAIL,body:user.email}
+            error.message = {ok:false,message:message.DUPLICATE_EMAIL,body:user.email}
         
             throw error
         }
@@ -45,7 +45,7 @@ module.exports = {
         user = user ? user._doc : null
         if (user === null){
             error.status = httpStatus.NOT_FOUND
-            error.message = {message:message.NOT_FOUND,body:user}
+            error.message = {ok:false,message:message.NOT_FOUND,body:user}
         
             throw error
         }
@@ -57,13 +57,28 @@ module.exports = {
 
         console.log(validPassword);
         if (!validPassword) {
-            error.status = httpStatus.UNAUTHORIZED
-            error.message = {message:message.UNAUTHORIZED,body:'credenciales inválidas'}
+            const error = new Error()
+            error.status = httpStatus.UNAUTHORIZED;
+            error.message = {ok:false,message:message.UNAUTHORIZED};
+
             throw error
+
         }
 
         delete user.password
         user.token = generateAccessToken(user)
         return user
+    },
+    revalidateToken : async (req) => {
+
+            let user = {
+                email: req.body.email,
+                _id: req.body.id
+              };
+            const token = await generateAccessToken(user);
+
+            return token
+     
+          
     }
 }
