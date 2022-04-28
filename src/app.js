@@ -34,12 +34,13 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  
   // render the error page
+  console.log("error: ",err)
   res.status(err.status || 500).json({
     message: err.message || "INTERNAL SERVER ERROR",
-    body: err || err.body
+    status: err.status || 500,
+    body: err.body || err
   });
 });
-
 module.exports = app;

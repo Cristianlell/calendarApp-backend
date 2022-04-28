@@ -2,19 +2,25 @@ const eventRepository = require("../repositories/eventRepository")
 const error = new Error;
 const httpStatus = require('../constants/httpStatus')
 const message = require('../constants/messages');
+const moment = require("moment");
 
 
 module.exports = {
     getAll: async (req,key) =>{
         let {uid} = req 
-        return await eventRepository.getAll(uid,key);
+        let events = await eventRepository.getAll(uid,key);
+        
+        return events;
 
     },
 
     create: async (req) =>{
         let event = req.body;
+        event.start = moment(event.start).format()
+        event.end = moment(event.end).format()
+
         event.user = req.uid
-        console.log(event)
+        
         let result = await eventRepository.create(event) 
 
         return result;
@@ -45,9 +51,9 @@ module.exports = {
 
     remove: async (req) => {
         let {id} = req.params;
-        
+        console.log("id del evento: ",id);
         const event = await eventRepository.getById(id)
-        console.log(event)
+        console.log("evento a borrar: ",event)
         if(!event){
             error.status = httpStatus.NOT_FOUND;
             error.message ={ messge:message.NOT_FOUND, body:event};

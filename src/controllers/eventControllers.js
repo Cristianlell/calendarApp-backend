@@ -7,7 +7,6 @@ module.exports = {
         
         try {
             const events = await eventServices.getAll(req,'name');
-            console.log(events);
             return res.status(httpStatus.OK).json({message:message.OK,body:events ? events : []})
 
         } catch (error) {
@@ -39,7 +38,9 @@ module.exports = {
 
     remove: async (req,res) => {
         try {
+            console.log(req)
             let result = await eventServices.remove(req);
+            console.log("result controller: ",result)
             return res.status(httpStatus.OK).json({ok:message.OK,body:result})
 
         } catch (error) {

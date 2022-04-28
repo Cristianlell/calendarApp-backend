@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { check } = require("express-validator");
+const { param} = require("express-validator");
 const router = Router();
 const eventController =  require('../controllers/eventControllers');
 const authentication = require("../middlewares/authentication");
@@ -14,9 +14,7 @@ router
     .get('/',eventController.getAll)
     .post('/',eventValidator,validationFields,eventController.create)
     .put('/:id',updateValidator,validationFields,eventController.update)
-    .delete('/:id', check('id', 'No es un id válido de mongoDB').isMongoId(),validationFields, eventController.remove)
-
-
+    .delete('/:id', param('id', 'No es un id válido de mongoDB').isMongoId(),validationFields, eventController.remove)
 
 
 module.exports = router

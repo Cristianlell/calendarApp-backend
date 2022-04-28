@@ -59,7 +59,7 @@ module.exports = {
         if (!validPassword) {
             const error = new Error()
             error.status = httpStatus.UNAUTHORIZED;
-            error.message = {ok:false,message:message.UNAUTHORIZED};
+            error.message = {ok:false,message:"Credenciales inválidas"};
 
             throw error
 
