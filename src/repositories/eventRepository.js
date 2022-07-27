@@ -1,23 +1,23 @@
 const Event = require('../database/models/Events')
 
 module.exports = {
-    getAll: async (uid,key) =>{
-      return await Event.find({ user: uid }).populate('user',key)
-    },
-    
-    getById: async (id) =>{
-      return await Event.findById(id)
-    },
+  getAll: async (uid, key) => {
+    return await Event.find({ user: uid }).populate('user', key)
+  },
 
-    create: async (event) =>{
-        return await Event.create(event);
-    },
+  getById: async (id) => {
+    return await Event.findById(id)
+  },
 
-    update: async (id,body) =>{
-      return await Event.findByIdAndUpdate(id,body)
-    },
+  create: async (event) => {
+    return await Event.create(event);
+  },
 
-    remove: async (id) => {
-        return await Event.findByIdAndDelete(id);
-    }
+  update: async (id, body) => {
+    return await Event.findByIdAndUpdate(id, body)
+  },
+
+  remove: async (id) => {
+    return await Event.findByIdAndDelete(id);
+  }
 }

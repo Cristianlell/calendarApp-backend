@@ -1,51 +1,27 @@
 const eventServices = require("../services/eventService")
 const httpStatus = require('../constants/httpStatus')
 const message = require('../constants/messages');
+const { catchAsync } = require("../helpers/catchAsync");
 
 module.exports = {
-    getAll: async (req,res) =>{
-        
-        try {
-            const events = await eventServices.getAll(req,'name');
-            return res.status(httpStatus.OK).json({message:message.OK,body:events ? events : []})
+    getAll: catchAsync(async (req, res) => {
+        const events = await eventServices.getAll(req, 'name');
 
-        } catch (error) {
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:message.INTERNAL_SERVER_ERROR,body : error})
-        }
-    },
+        return res.status(httpStatus.OK).json({ message: message.OK, body: events })
+    }),
 
-    create: async (req,res) =>{
-        try {
-           
-           let events = await eventServices.create(req);
+    create: catchAsync(async (req, res) => {
+        let events = await eventServices.create(req);
+        return res.status(httpStatus.CREATED).json({ ok: message.CREATED, body: events })
+    }),
 
-            return res.status(httpStatus.CREATED).json({ok:message.CREATED,body:events})
+    update: catchAsync(async (req, res) => {
+        let result = await eventServices.update(req);
+        return res.status(httpStatus.OK).json({ ok: message.OK, body: result })
+    }),
 
-        } catch (error) {
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:message.INTERNAL_SERVER_ERROR,body : error})
-        }
-    },
-
-    update: async (req,res) =>{
-        try {
-            let result = await eventServices.update(req);
-            return res.status(httpStatus.OK).json({ok:message.OK,body:result})
-
-        } catch (error) {
-            return res.status(error.status).json(error.message)
-        }
-    },
-
-    remove: async (req,res) => {
-        try {
-            console.log(req)
-            let result = await eventServices.remove(req);
-            console.log("result controller: ",result)
-            return res.status(httpStatus.OK).json({ok:message.OK,body:result})
-
-        } catch (error) {
-            console.log(error);
-            return res.status(error.status).json(error.message)
-        }
-    }
+    remove: catchAsync(async (req, res) => {
+        let result = await eventServices.remove(req);
+        return res.status(httpStatus.OK).json({ ok: message.OK, body: result })
+    })
 }

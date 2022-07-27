@@ -3,12 +3,15 @@ const error = new Error;
 const httpStatus = require('../constants/httpStatus')
 const message = require('../constants/messages');
 const moment = require("moment");
-
+const throwError = require("../helpers/throwError");
 
 module.exports = {
     getAll: async (req,key) =>{
         let {uid} = req 
         let events = await eventRepository.getAll(uid,key);
+        if (!events) {
+            return throwError(code.NOT_FOUND, message.NOT_FOUND);
+        }
         
         return events;
 
@@ -33,16 +36,11 @@ module.exports = {
         const event = await eventRepository.getById(id)
         
         if(!event){
-            error.status = httpStatus.NOT_FOUND;
-            error.message = {messge:message.NOT_FOUND, body:event};
-           
-            throw error
+            throwError(httpStatus.NOT_FOUND, message.NOT_FOUND)
         }
 
         if(event.user.toString() !== req.uid){
-            error.status = httpStatus.UNAUTHORIZED;
-            error.message = message.UNAUTHORIZED;
-            throw error
+            throwError(httpStatus.UNAUTHORIZED,message.UNAUTHORIZED)
         }
 
         let result = await eventRepository.update(id,req.body)
@@ -51,20 +49,13 @@ module.exports = {
 
     remove: async (req) => {
         let {id} = req.params;
-        console.log("id del evento: ",id);
         const event = await eventRepository.getById(id)
-        console.log("evento a borrar: ",event)
         if(!event){
-            error.status = httpStatus.NOT_FOUND;
-            error.message ={ messge:message.NOT_FOUND, body:event};
-           
-            throw error
+            throwError(httpStatus.NOT_FOUND, message.NOT_FOUND)
         }
 
         if(event.user.toString() !== req.uid){
-            error.status = httpStatus.UNAUTHORIZED;
-            error.message = message.UNAUTHORIZED;
-            throw error
+            throwError(httpStatus.UNAUTHORIZED, message.UNAUTHORIZED)
         }
 
         return await eventRepository.remove(id)
