@@ -6,10 +6,10 @@ const throwError = require("../helpers/throwError");
 
 module.exports = (req, res, next) => {
     
-    const {payload,err} = validateToken(req);
+    const {payload,err,uid} = validateToken(req);
     if (payload === null) return throwError(httpStatus.FORBIDDEN,message.FORBIDDEN,err.message) 
 
-    req.uid = payload.uid;
+    req.uid = uid;
   
     req.tokenPayload = payload;
   
